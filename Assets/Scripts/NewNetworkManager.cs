@@ -13,7 +13,7 @@ public class NewNetworkManager : NetworkManager
     // Start is called before the first frame update
     //void Start()
     //{
-    //    //print("insideeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+    //    //print("inside");
 
     //}
 
@@ -25,10 +25,6 @@ public class NewNetworkManager : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
-        print("insideeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-
-        //base.OnServerAddPlayer(conn);
-        //print("insideeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
         Transform start = numPlayers == 0 ? leftPosition : rightPosition;
         GameObject player = Instantiate(playerPrefab, start.position, start.rotation);
         NetworkServer.AddPlayerForConnection(conn, player);

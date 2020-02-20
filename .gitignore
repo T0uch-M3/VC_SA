@@ -14,6 +14,9 @@
 !Assets/Scenes/
 !Assets/Scripts/
 !Assets/Prefabs/
+*.meta
+*.config
+
 
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored

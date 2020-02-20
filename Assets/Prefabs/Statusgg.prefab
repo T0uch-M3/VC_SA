@@ -38,7 +38,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 500, y: 400}
+  m_AnchoredPosition: {x: -22, y: -7}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6628711185774350845
@@ -81,6 +81,8 @@ MonoBehaviour:
   activateVoice: {fileID: 0}
   rigidbody2d: {fileID: 4344754953127020399}
   ntManager: {fileID: 0}
+  triggered: 0
+  triggerStatus: 0
 --- !u!50 &4344754953127020399
 Rigidbody2D:
   serializedVersion: 4
