@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using Dissonance;
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class PlayerScript : NetworkBehaviour
 {
@@ -13,9 +13,9 @@ public class PlayerScript : NetworkBehaviour
 
     public bool triggered = false;
     public bool triggerStatus = false;
-    private RoomChannels channel;
-    public RoomChannel chan;
-    private DissonanceComms dc;
+    private RoomChannels chanCol;
+    public RoomChannel roomChan;
+    private DissonanceComms disCom;
     public Text statusText;
 
 
@@ -23,7 +23,9 @@ public class PlayerScript : NetworkBehaviour
     void Start()
     {
         ntManager = GameObject.Find("NetworkManager").GetComponent<NewNetworkManager>();
-
+        disCom = GameObject.Find("DissonanceSetup").GetComponent<DissonanceComms>();
+        //channels collection
+        chanCol = disCom.RoomChannels;
     }
 
     [SyncVar(hook = nameof(OnStatusChange))]
@@ -32,16 +34,17 @@ public class PlayerScript : NetworkBehaviour
     void OnStatusChange(string oldStatusData, string newStatusData)
     {
         print("OnStatusChange");
-        //TODO: I could change the statusText object from the server with it's id??
         statusText.text = newStatusData;
     }
 
 
     [Command]
-    void CmdUpdateStatus()
+    void CmdUpdateStatus(string value)
     {
-        print("CmdUpdateStatus");
-        statusData = Random.Range(100, 999).ToString();
+        //print("CmdUpdateStatus");
+        statusData = value;
+
+        //statusData = Random.Range(100, 999).ToString();
     }
 
     /* This another working method for sending messages from client to server
@@ -64,8 +67,16 @@ public class PlayerScript : NetworkBehaviour
     }
     */
 
+    
+
+    //[Command]
+    //void CloseClientSideChannels()
+    //{
+
+    //}
+
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (isLocalPlayer)
         {
@@ -74,7 +85,15 @@ public class PlayerScript : NetworkBehaviour
 
         }
         //InvokeRepeating(nameof(CmdUpdateStatus), 1, 1);
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            print(chanCol.Count);
+            print("TRIGGERED: "+triggered);
+            
+        }
 
+        if (!isLocalPlayer) return;
+        CmdUpdateStatus(chanCol.Count > 0 ? "open" : "close");
 
     }
 
@@ -85,10 +104,13 @@ public class PlayerScript : NetworkBehaviour
 
     public override void OnStartClient()
     {
+        //CloseOpenedChannels();
         //print("entered CLIENT START");
         base.OnStartClient();
 
         transform.SetParent(GameObject.Find("ButtonPanel").transform);
+
+        
         //transform.position = new Vector2(400, 500);
         //transform.position = ntManager.GetStartPosition().position;
     }
@@ -99,17 +121,46 @@ public class PlayerScript : NetworkBehaviour
         if (!triggered)
         {
             print("clicked");
-            //chan = channel.Open("Global", true);
-            CmdUpdateStatus();
+            if (isLocalPlayer)
+                roomChan = chanCol.Open("Global", true);
+            //CmdUpdateStatus();
             triggered = true;
             //triggerStatus = true;
         }
         else
         {
             print("!clicked");
-            //chan.Dispose();
-            CmdUpdateStatus();
+            if (isLocalPlayer)
+                roomChan.Dispose();
+            //CmdUpdateStatus();
             triggered = false;
         }
     }
+    /// TODO/ Check the number of opened channel before closing from outside
+    /// TODO/ the class, print it the count out and see, so we know whether we   
+    /// TODO/ are checking the right object/script or not
+    //public void CloseOpenedChannels()
+    //{
+    //    //try
+    //    //{
+    //    if (isServer)
+    //    {
+    //        print("CLOSE FROM SERVER");
+    //        //print(chanCol.Count);
+    //        roomChan.Dispose();
+    //    }
+    //    else
+    //    {
+    //        print("CLOSE FROM CLIENT");
+    //        //print(chanCol.Count);
+    //        roomChan.Dispose();
+    //    }
+    //    //}
+    //    //catch (NullReferenceException ex)
+    //    //{
+    //    //    print(ex.Message);
+    //    //}
+    //}
+
+    
 }
