@@ -405,6 +405,8 @@ GameObject:
   - component: {fileID: 1473573894}
   - component: {fileID: 1473573895}
   - component: {fileID: 1473573891}
+  - component: {fileID: 1473573892}
+  - component: {fileID: 1473573890}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -412,6 +414,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1473573890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473573889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c37d3deca7a834d80cfd8d3cfcc510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkDiscovery: {fileID: 1473573892}
 --- !u!114 &1473573891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,6 +471,36 @@ MonoBehaviour:
   EnetPollTimeout: 1
   MaxPacketSizeInKb: 64
   Channels: 0100000002000000
+--- !u!114 &1473573892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473573889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c761308e733c51245b2e8bb4201f46dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  secretHandshake: 5235262852547671088
+  serverBroadcastListenPort: 47777
+  ActiveDiscoveryInterval: 3
+  transport: {fileID: 0}
+  OnServerFound:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1473573890}
+        m_MethodName: OnDiscoveredServer
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1473573893
 Transform:
   m_ObjectHideFlags: 0
@@ -518,7 +563,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showGUI: 1
   offsetX: 0
-  offsetY: 0
+  offsetY: 100
   width: 700
   hight: 90
   fontSize: 30
