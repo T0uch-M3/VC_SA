@@ -31,6 +31,8 @@ public class PlayerScript : NetworkBehaviour
     [SyncVar(hook = nameof(OnStatusChange))]
     public string statusData;
 
+
+
     void OnStatusChange(string oldStatusData, string newStatusData)
     {
         print("OnStatusChange");
@@ -67,7 +69,7 @@ public class PlayerScript : NetworkBehaviour
     }
     */
 
-    
+
 
     //[Command]
     //void CloseClientSideChannels()
@@ -88,8 +90,8 @@ public class PlayerScript : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             print(chanCol.Count);
-            print("TRIGGERED: "+triggered);
-            
+            print("TRIGGERED: " + triggered);
+
         }
 
         if (!isLocalPlayer) return;
@@ -110,7 +112,7 @@ public class PlayerScript : NetworkBehaviour
 
         transform.SetParent(GameObject.Find("ButtonPanel").transform);
 
-        
+
         //transform.position = new Vector2(400, 500);
         //transform.position = ntManager.GetStartPosition().position;
     }
@@ -162,5 +164,5 @@ public class PlayerScript : NetworkBehaviour
     //    //}
     //}
 
-    
+
 }

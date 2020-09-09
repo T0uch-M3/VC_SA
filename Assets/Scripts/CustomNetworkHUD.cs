@@ -15,7 +15,7 @@ using UnityEngine;
 [HelpURL("https://mirror-networking.com/docs/Components/NetworkManagerHUD.html")]
 public class CustomNetworkHUD : MonoBehaviour
 {
-    NewNetworkManager manager;
+    NewNetworkManager _manager;
 
     /// <summary>
     /// Whether to show the default control HUD at runtime.
@@ -33,12 +33,12 @@ public class CustomNetworkHUD : MonoBehaviour
     public int offsetY;
 
     public int width;
-    public int hight;
+    public int height;
     public int fontSize;
 
     void Awake()
     {
-        manager = GetComponent<NewNetworkManager>();
+        _manager = GetComponent<NewNetworkManager>();
     }
 
     void OnGUI()
@@ -48,9 +48,9 @@ public class CustomNetworkHUD : MonoBehaviour
         GUIStyle guiStyle = GUI.skin.GetStyle("Button");
         guiStyle.fontSize = fontSize;
         guiStyle.normal.textColor = Color.white;
-        GUIStyle guiStyleTF = GUI.skin.GetStyle("TextField");
-        guiStyleTF.fontSize = fontSize;
-        guiStyleTF.normal.textColor = Color.white;
+        GUIStyle guiStyleTf = GUI.skin.GetStyle("TextField");
+        guiStyleTf.fontSize = fontSize;
+        guiStyleTf.normal.textColor = Color.white;
         GUIStyle guiStyleL = GUI.skin.GetStyle("Label");
         guiStyleL.fontSize = fontSize;
         guiStyleL.normal.textColor = Color.white;
@@ -63,19 +63,19 @@ public class CustomNetworkHUD : MonoBehaviour
                 // LAN Host
                 if (Application.platform != RuntimePlatform.WebGLPlayer)
                 {
-                    if (GUILayout.Button("LAN Host", guiStyle, GUILayout.Height(hight)))
+                    if (GUILayout.Button("LAN Host", guiStyle, GUILayout.Height(height)))
                     {
-                        manager.StartHost();
+                        _manager.StartHost();
                     }
                 }
 
                 // LAN Client + IP
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button("LAN Client", guiStyle, GUILayout.Height(hight)))
+                if (GUILayout.Button("LAN Client", guiStyle, GUILayout.Height(height)))
                 {
-                    manager.StartClient();
+                    _manager.StartClient();
                 }
-                manager.networkAddress = GUILayout.TextField(manager.networkAddress, guiStyleTF, GUILayout.Height(hight));
+                _manager.networkAddress = GUILayout.TextField(_manager.networkAddress, guiStyleTf, GUILayout.Height(height));
                 GUILayout.EndHorizontal();
 
                 // LAN Server Only
@@ -86,16 +86,16 @@ public class CustomNetworkHUD : MonoBehaviour
                 }
                 else
                 {
-                    if (GUILayout.Button("LAN Server Only", guiStyle, GUILayout.Height(hight))) manager.StartServer();
+                    if (GUILayout.Button("LAN Server Only", guiStyle, GUILayout.Height(height))) _manager.StartServer();
                 }
             }
             else
             {
                 // Connecting
-                GUILayout.Label("Connecting to " + manager.networkAddress + "..", guiStyleL, GUILayout.Height(hight));
-                if (GUILayout.Button("Cancel Connection Attempt", guiStyle, GUILayout.Height(hight)))
+                GUILayout.Label("Connecting to " + _manager.networkAddress + "..", guiStyleL, GUILayout.Height(height));
+                if (GUILayout.Button("Cancel Connection Attempt", guiStyle, GUILayout.Height(height)))
                 {
-                    manager.StopClient();
+                    _manager.StopClient();
                 }
             }
         }
@@ -104,18 +104,18 @@ public class CustomNetworkHUD : MonoBehaviour
             // server / client status message
             if (NetworkServer.active)
             {
-                GUILayout.Label("Server: active. Transport: " + Transport.activeTransport, guiStyleL, GUILayout.Height(hight));
+                GUILayout.Label("Server: active. Transport: " + Transport.activeTransport, guiStyleL, GUILayout.Height(height));
             }
             if (NetworkClient.isConnected)
             {
-                GUILayout.Label("Client: address=" + manager.networkAddress, guiStyleL, GUILayout.Height(hight));
+                GUILayout.Label("Client: address=" + _manager.networkAddress, guiStyleL, GUILayout.Height(height));
             }
         }
 
         // client ready
         if (NetworkClient.isConnected && !ClientScene.ready)
         {
-            if (GUILayout.Button("Client Ready", guiStyle, GUILayout.Height(hight)))
+            if (GUILayout.Button("Client Ready", guiStyle, GUILayout.Height(height)))
             {
                 ClientScene.Ready(NetworkClient.connection);
 
@@ -129,9 +129,9 @@ public class CustomNetworkHUD : MonoBehaviour
         // stop
         if (NetworkServer.active || NetworkClient.isConnected)
         {
-            if (GUILayout.Button("Stop", guiStyle, GUILayout.Height(hight)))
+            if (GUILayout.Button("Stop", guiStyle, GUILayout.Height(height)))
             {
-                manager.StopHost();
+                _manager.StopHost();
             }
         }
 
