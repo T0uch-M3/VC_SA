@@ -9,6 +9,7 @@ public class NewNetworkManager : NetworkManager
     public Transform leftPosition;
     public Transform rightPosition;
     public PlayerScript playerScript;
+    public static bool clientLoaded = false;
 
     
     //private GameObject player;
@@ -37,6 +38,7 @@ public class NewNetworkManager : NetworkManager
 
     public override void OnClientDisconnect(NetworkConnection conn)
     {
+        clientLoaded = false;
         //playerScript.CloseOpenedChannels();
         print("***********************************OnClientDisconnect");
         base.OnClientDisconnect(conn);
@@ -48,5 +50,13 @@ public class NewNetworkManager : NetworkManager
         //playerScript.CloseOpenedChannels();
         print("************************************OnServerDisconnect");
         base.OnServerDisconnect(conn);
+    }
+
+    
+    public override void OnClientConnect(NetworkConnection conn)
+    {
+        print("CLIENT LOADED");
+        clientLoaded = true;
+        base.OnClientConnect(conn);
     }
 }

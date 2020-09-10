@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Dissonance;
 using Mirror;
 using UnityEngine;
@@ -11,12 +11,13 @@ public class PlayerScript : NetworkBehaviour
     public Rigidbody2D rigidbody2d;
     public NewNetworkManager ntManager;
 
-    public bool triggered = false;
+    public static bool triggered = false;
     public bool triggerStatus = false;
     private RoomChannels chanCol;
     public RoomChannel roomChan;
     private DissonanceComms disCom;
     public Text statusText;
+    public static bool clicked = false;
 
 
     // Start is called before the first frame update
@@ -97,6 +98,10 @@ public class PlayerScript : NetworkBehaviour
         if (!isLocalPlayer) return;
         CmdUpdateStatus(chanCol.Count > 0 ? "open" : "close");
 
+        if (clicked)
+        {
+            OpenVoiceComm();
+        }
     }
 
     public override void OnStartLocalPlayer()
@@ -128,6 +133,7 @@ public class PlayerScript : NetworkBehaviour
             //CmdUpdateStatus();
             triggered = true;
             //triggerStatus = true;
+            clicked = false;
         }
         else
         {
@@ -136,6 +142,7 @@ public class PlayerScript : NetworkBehaviour
                 roomChan.Dispose();
             //CmdUpdateStatus();
             triggered = false;
+            clicked = false;
         }
     }
     /// TODO/ Check the number of opened channel before closing from outside
@@ -163,6 +170,4 @@ public class PlayerScript : NetworkBehaviour
     //    //    print(ex.Message);
     //    //}
     //}
-
-
 }

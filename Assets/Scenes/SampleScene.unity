@@ -406,6 +406,8 @@ MonoBehaviour:
   networkDiscovery: {fileID: 1473573892}
   timeRemaining: 10
   timerIsRunning: 0
+  foundServer: 0
+  isServer: 1
 --- !u!1 &1415214741
 GameObject:
   m_ObjectHideFlags: 0

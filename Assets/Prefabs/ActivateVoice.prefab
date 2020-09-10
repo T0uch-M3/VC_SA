@@ -82,7 +82,7 @@ MonoBehaviour:
   activateVoice: {fileID: 0}
   rigidbody2d: {fileID: -7463989000448912717}
   ntManager: {fileID: 0}
-  triggered: 0
+  triggered: 1
   triggerStatus: 0
   statusText: {fileID: 1391463694060391664}
   statusData: 
@@ -244,8 +244,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6039907069810034158}
-        m_MethodName: OpenVoiceComm
+      - m_Target: {fileID: 0}
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

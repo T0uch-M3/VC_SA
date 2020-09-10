@@ -6,6 +6,7 @@ using Mirror.Discovery;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
@@ -31,6 +32,7 @@ public class DontDestroyOnLoad : MonoBehaviour
     public bool timerIsRunning = false;
     public bool foundServer = false;
     private TextMeshProUGUI unitText;
+    public bool isServer = true;
     void Awake()
     {
         //if (Instance == null)
@@ -120,11 +122,14 @@ public class DontDestroyOnLoad : MonoBehaviour
         if (Input.GetMouseButtonDown(0) &&
             EventSystem.current.currentSelectedGameObject == uniBtn)
         {
-            if (/*isEditor || */isWindows)
+            //if (/*isEditor || */isWindows)
+            if (isServer)
             {
                 discoveredServers.Clear();
                 _manager.StartHost();
                 networkDiscovery.AdvertiseServer();
+                //this.gameObject.GetComponent<Canvas>().sortingOrder--;
+
             }
             else
             {
@@ -141,8 +146,38 @@ public class DontDestroyOnLoad : MonoBehaviour
                 else
                 {
                     _manager.StartClient(discoveredServers.Values.First().uri);
+                    //SceneManager.LoadScene(1);
                 }
             }
+
+            
         }
+        //if (NewNetworkManager.clientLoaded)
+        //{
+
+        //    unitText.text = "Start";
+        //}
+
+        if (Input.GetMouseButtonDown(1))
+            //EventSystem.current.currentSelectedGameObject == uniBtn)
+        {
+            if (unitText.text == "Server")
+            {
+                unitText.text = "Client";
+                isServer = false;
+            }
+            else
+            {
+                unitText.text = "Server";
+                isServer = true;
+            }
+        }
+
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    SceneManager.LoadScene(0);
+        //    this.gameObject.GetComponent<Canvas>().sortingOrder++;
+        //}
     }
+
 }
