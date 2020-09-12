@@ -38,6 +38,13 @@ public class PlayerScript : NetworkBehaviour
     {
         print("OnStatusChange");
         statusText.text = newStatusData;
+        if (newStatusData == "open")
+            //print("stopppppppppppp");
+            BtnScript.text = "stop";
+        else
+            //print("starttttttttttttttt");
+
+            BtnScript.text = "start";
     }
 
 
@@ -46,6 +53,7 @@ public class PlayerScript : NetworkBehaviour
     {
         //print("CmdUpdateStatus");
         statusData = value;
+        //BtnScript.text = triggered ? "Stop" : "Start";
 
         //statusData = Random.Range(100, 999).ToString();
     }
@@ -77,6 +85,7 @@ public class PlayerScript : NetworkBehaviour
     //{
 
     //}
+
 
     // Update is called once per frame
     void Update()
