@@ -115,7 +115,7 @@ public class DontDestroyOnLoad : MonoBehaviour
                 //print("Servers found = " + discoveredServers.Count);
                 timerIsRunning = false;
                 uniBtn.GetComponent<Button>().interactable = true;
-                unitText.text = "tRy aGaIn";
+                unitText.text = "Try Again";
             }
         }
 
@@ -139,7 +139,7 @@ public class DontDestroyOnLoad : MonoBehaviour
                     networkDiscovery.StartDiscovery();
                     timerIsRunning = true;
                     timeRemaining = 5;
-                    unitText.text = "wAiT..";
+                    unitText.text = "Wait..";
                     uniBtn.GetComponent<Button>().interactable = false;
                     //uniBtn.SetActive(false);}
                 }

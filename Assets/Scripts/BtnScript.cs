@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BtnScript : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public class BtnScript : MonoBehaviour
     void Update()
     {
         uniText2.text = text;
+        if (text == "stop")
+            uniBtn2.GetComponent<Image>().color = Color.red;
+        else
+            uniBtn2.GetComponent<Image>().color = Color.green;
         //if (NewNetworkManager.clientLoaded)
         //{
         //    uniText2.text = text;
@@ -35,6 +40,7 @@ public class BtnScript : MonoBehaviour
     //Since directly triggering OpenVoiceComm from outside trigger an exception
     public void changeClickStatus()
     {
-        PlayerScript.clicked = PlayerScript.clicked != true;
+        //PlayerScript.clicked = PlayerScript.clicked != true;
+        PlayerScript.clicked = true;
     }
 }

@@ -39,12 +39,13 @@ public class PlayerScript : NetworkBehaviour
         print("OnStatusChange");
         statusText.text = newStatusData;
         if (newStatusData == "open")
-            //print("stopppppppppppp");
+        {
             BtnScript.text = "stop";
+        }
         else
-            //print("starttttttttttttttt");
-
+        {
             BtnScript.text = "start";
+        }
     }
 
 
@@ -107,9 +108,11 @@ public class PlayerScript : NetworkBehaviour
         if (!isLocalPlayer) return;
         CmdUpdateStatus(chanCol.Count > 0 ? "open" : "close");
 
+        //clicked change is triggered from inside BtnScript.cs
         if (clicked)
         {
             OpenVoiceComm();
+            clicked = false;
         }
     }
 
@@ -136,22 +139,26 @@ public class PlayerScript : NetworkBehaviour
     {
         if (!triggered)
         {
+            if (BtnScript.text == "stop")
+                return;
             print("clicked");
             if (isLocalPlayer)
                 roomChan = chanCol.Open("Global", true);
             //CmdUpdateStatus();
             triggered = true;
             //triggerStatus = true;
-            clicked = false;
+            //clicked = false;
         }
         else
         {
+            if (BtnScript.text == "start")
+                return;
             print("!clicked");
             if (isLocalPlayer)
                 roomChan.Dispose();
             //CmdUpdateStatus();
             triggered = false;
-            clicked = false;
+            //clicked = false;
         }
     }
     /// TODO/ Check the number of opened channel before closing from outside
