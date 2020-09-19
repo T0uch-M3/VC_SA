@@ -47,9 +47,11 @@ public class NewNetworkManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
+        //playerScript.stopHost();
+        PlayerScript.triggerDisconnect = true;
         //playerScript.CloseOpenedChannels();
         print("************************************OnServerDisconnect");
-        base.OnServerDisconnect(conn);
+        //base.OnServerDisconnect(conn);
     }
 
     

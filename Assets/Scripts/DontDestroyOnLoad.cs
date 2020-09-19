@@ -46,6 +46,8 @@ public class DontDestroyOnLoad : MonoBehaviour
         //    return;
         //}
         _manager = GameObject.Find("NetworkManager").GetComponent<NewNetworkManager>();
+        networkDiscovery = _manager.GetComponent<NetworkDiscovery>();
+
     }
 #if UNITY_EDITOR
     void OnValidate()
@@ -146,6 +148,8 @@ public class DontDestroyOnLoad : MonoBehaviour
                 else
                 {
                     _manager.StartClient(discoveredServers.Values.First().uri);
+                    networkDiscovery.StopDiscovery();
+                    foundServer = false;
                     //SceneManager.LoadScene(1);
                 }
             }
@@ -165,6 +169,7 @@ public class DontDestroyOnLoad : MonoBehaviour
             {
                 unitText.text = "Client";
                 isServer = false;
+                print("switch");
             }
             else
             {

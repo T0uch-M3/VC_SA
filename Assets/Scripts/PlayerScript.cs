@@ -1,6 +1,7 @@
 using System;
 using Dissonance;
 using Mirror;
+using Mirror.Websocket;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -18,6 +19,7 @@ public class PlayerScript : NetworkBehaviour
     private DissonanceComms disCom;
     public Text statusText;
     public static bool clicked = false;
+    public static bool triggerDisconnect = false;
 
 
     // Start is called before the first frame update
@@ -100,13 +102,15 @@ public class PlayerScript : NetworkBehaviour
         //InvokeRepeating(nameof(CmdUpdateStatus), 1, 1);
         if (Input.GetKeyDown(KeyCode.X))
         {
-            print(chanCol.Count);
-            print("TRIGGERED: " + triggered);
+            ntManager.StopHost();
+            //print(chanCol.Count);
+            //print("TRIGGERED: " + triggered);
 
         }
 
         if (!isLocalPlayer) return;
-        CmdUpdateStatus(chanCol.Count > 0 ? "open" : "close");
+        if (NetworkClient.active)
+            CmdUpdateStatus(chanCol.Count > 0 ? "open" : "close");
 
         //clicked change is triggered from inside BtnScript.cs
         if (clicked)
@@ -114,6 +118,15 @@ public class PlayerScript : NetworkBehaviour
             OpenVoiceComm();
             clicked = false;
         }
+        if (triggerDisconnect)
+        {
+            if (isServer)
+                ntManager.StopHost();
+            triggerDisconnect = false;
+        }
+        //print("TRIGGER DISCONNECT");
+        //if(isServer)
+        //    print("NBRPALYER  " + ntManager.numPlayers.ToString());
     }
 
     public override void OnStartLocalPlayer()
@@ -132,15 +145,34 @@ public class PlayerScript : NetworkBehaviour
 
         //transform.position = new Vector2(400, 500);
         //transform.position = ntManager.GetStartPosition().position;
+
     }
+
+    //public void stopHost()
+    //{
+    //    if (isServer )
+    //    {
+    //        print("inside stopHost" );
+    //        ntManager.StopHost();
+    //    }
+    //}
+
     //The calling of CmdUpdateStatus below is counting on object authority to 
     //prevent unwanted access to the object when not "isLocalPl yer"
     public void OpenVoiceComm()
     {
         if (!triggered)
         {
-            if (BtnScript.text == "stop")
-                return;
+            if (isServer && BtnScript.text == "stop")
+            {
+                //print("NBRPALYER" + ntManager.numPlayers.ToString());
+                ntManager.StopHost();
+            }
+            if (isClient && BtnScript.text == "stop")
+            {
+                ntManager.StopClient();
+            }
+
             print("clicked");
             if (isLocalPlayer)
                 roomChan = chanCol.Open("Global", true);
