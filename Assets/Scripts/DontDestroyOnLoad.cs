@@ -1,24 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using Mirror;
 using Mirror.Discovery;
+using Mirror.Websocket;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
 
-public class DontDestroyOnLoad : MonoBehaviour
+public class DontDestroyOnload : MonoBehaviour
 {
     //will be used for things related to networking later
     private NewNetworkManager _manager;
 
     //Since dontdestroyonload will produce duplicate objects, a fix is needed
     //And this static instance var of this class will be used for that 
-    public static DontDestroyOnLoad Instance;
+    public static DontDestroyOnload Instance;
     public GameObject uniBtn;
     public GameObject eventSystem;
     readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
@@ -33,6 +37,14 @@ public class DontDestroyOnLoad : MonoBehaviour
     public bool foundServer = false;
     private TextMeshProUGUI unitText;
     public bool isServer = true;
+    public static bool disconnected = false;
+    public UnityEvent uEvent;
+
+    bool pointerDown = false;
+    float clickTimer = 0.6f;
+    bool clickChanged = false;
+    bool advance = false;
+    bool secondClick = false;
     void Awake()
     {
         //if (Instance == null)
@@ -57,7 +69,7 @@ public class DontDestroyOnLoad : MonoBehaviour
             networkDiscovery = GetComponent<NetworkDiscovery>();
             UnityEditor.Events.UnityEventTools.AddPersistentListener(networkDiscovery.OnServerFound,
                 OnDiscoveredServer);
-            UnityEditor.Undo.RecordObjects(new Object[] {this, networkDiscovery}, "Set NetworkDiscovery");
+            UnityEditor.Undo.RecordObjects(new Object[] { this, networkDiscovery }, "Set NetworkDiscovery");
         }
     }
 #endif
@@ -80,16 +92,15 @@ public class DontDestroyOnLoad : MonoBehaviour
             unitText.text = "Server";
         }
 
-        //timerIsRunning = true;
-    }
 
-    public void uniBtnClick()
-    {
-        //print("PRESSED");
+        networkDiscovery.OnServerFound.AddListener(OnDiscoveredServer);
+
+        //timerIsRunning = true;
     }
 
     public void OnDiscoveredServer(ServerResponse info)
     {
+        print("INSIDE OnDiscoveredServer");
         // Note that you can check the versioning to decide if you can connect to the server or not using this method
         discoveredServers[info.serverId] = info;
     }
@@ -97,6 +108,37 @@ public class DontDestroyOnLoad : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (disconnected)
+        {
+            print("STooooooooooooooooooooooooooooooooOP DISCOVERY");
+            networkDiscovery.StopDiscovery();
+            disconnected = false;
+        }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            //print("SERVERS::: " + discoveredServers.Count);
+            //networkDiscovery.StopDiscovery();
+            //Destroy(GameObject.Find("NetworkManager"));
+            //networkDiscovery.StopDiscovery();
+            //_manager.gameObject.AddComponent<NetworkDiscovery>();
+        }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            //print("SERVERS::: " + discoveredServers.Count);
+            networkDiscovery.StartDiscovery();
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            //print("SERVERS::: " + discoveredServers.Count);
+            networkDiscovery.StopDiscovery();
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            //print("SERVERS::: " + discoveredServers.Count);
+            //networkDiscovery.AdvertiseServer();
+            //OnDiscoveredServer();
+        }
+
         if (timerIsRunning)
         {
             if (timeRemaining > 0)
@@ -104,6 +146,7 @@ public class DontDestroyOnLoad : MonoBehaviour
                 timeRemaining -= Time.deltaTime;
                 if (discoveredServers.Count > 0)
                 {
+                    print("SERVERS::: " + discoveredServers.Count);
                     timerIsRunning = false;
                     uniBtn.GetComponent<Button>().interactable = true;
                     //unitText.text = discoveredServers.Count.ToString();
@@ -121,12 +164,12 @@ public class DontDestroyOnLoad : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0) &&
-            EventSystem.current.currentSelectedGameObject == uniBtn)
+        if (advance)
         {
             //if (/*isEditor || */isWindows)
             if (isServer)
             {
+                print("SERVVVVVVVVVVVVER");
                 discoveredServers.Clear();
                 _manager.StartHost();
                 networkDiscovery.AdvertiseServer();
@@ -137,6 +180,7 @@ public class DontDestroyOnLoad : MonoBehaviour
             {
                 if (!foundServer)
                 {
+                    print("CLIIIIIIIIIIIIIIENT");
                     discoveredServers.Clear();
                     networkDiscovery.StartDiscovery();
                     timerIsRunning = true;
@@ -147,42 +191,72 @@ public class DontDestroyOnLoad : MonoBehaviour
                 }
                 else
                 {
+                    print("INNNNNNNNNNSIDEEE");
                     _manager.StartClient(discoveredServers.Values.First().uri);
-                    networkDiscovery.StopDiscovery();
+                    //networkDiscovery.StopDiscovery();
                     foundServer = false;
+                    //discoveredServers.Clear();
                     //SceneManager.LoadScene(1);
                 }
             }
 
-            
+
         }
-        //if (NewNetworkManager.clientLoaded)
-        //{
 
-        //    unitText.text = "Start";
-        //}
-
-        if (Input.GetMouseButtonDown(1))
-            //EventSystem.current.currentSelectedGameObject == uniBtn)
+        if (pointerDown)
         {
-            if (unitText.text == "Server")
+            //Debug.Log("Right Clicked on " + this.name);
+            clickTimer -= Time.deltaTime;
+            //print(clickTimer);
+            if (clickTimer < 0)
             {
-                unitText.text = "Client";
-                isServer = false;
-                print("switch");
+                pointerDown = false;
+                clickTimer = 0.7f;
+                clickChanged = true;
+                secondClick = false;
+                if (unitText.text == "Server")
+                {
+                    unitText.text = "Client";
+                    isServer = false;
+                    print("switch");
+                }
+                else
+                {
+                    unitText.text = "Server";
+                    isServer = true;
+                    print("switch");
+                }
             }
-            else
-            {
-                unitText.text = "Server";
-                isServer = true;
-            }
-        }
 
-        //if (Input.GetKeyDown(KeyCode.R))
-        //{
-        //    SceneManager.LoadScene(0);
-        //    this.gameObject.GetComponent<Canvas>().sortingOrder++;
-        //}
+        }
+        if (advance)
+        {
+            print("ADVANCE " + unitText.text);
+            advance = false;
+        }
+    }
+
+    public void OnPointerUp()
+    {
+        pointerDown = false;
+        if (!clickChanged)
+        {
+            clickTimer = 0.7f;
+            advance = true;
+        }
+        if (clickChanged && secondClick)
+        {
+            advance = true;
+            clickChanged = false;
+            secondClick = false;
+        }
+    }
+    public void OnPointerDown()
+    {
+        pointerDown = true;
+        if (clickChanged)
+            secondClick = true;
+
     }
 
 }

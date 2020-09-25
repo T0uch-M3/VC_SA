@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
 
 [AddComponentMenu("")]
@@ -40,6 +38,7 @@ public class NewNetworkManager : NetworkManager
     {
         clientLoaded = false;
         //playerScript.CloseOpenedChannels();
+        DontDestroyOnload.disconnected = true;
         print("***********************************OnClientDisconnect");
         base.OnClientDisconnect(conn);
         
@@ -47,14 +46,51 @@ public class NewNetworkManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
-        //playerScript.stopHost();
+        //since this get triggered when client leave server
+        //we want to opt the server out from the comm interface
+        //this way, both client and server will go back to their initial UI
+        //so the roles can be switched if necessary 
         PlayerScript.triggerDisconnect = true;
+
+        //DontDestroyOnload.disconnected = true;
+        //DontDestroyOnload.disconnected = true;
         //playerScript.CloseOpenedChannels();
         print("************************************OnServerDisconnect");
         //base.OnServerDisconnect(conn);
     }
 
-    
+    public override void OnApplicationQuit()
+    {
+        print("************************************OnApplicationQuit");
+        base.OnApplicationQuit();
+    }
+
+    public override void OnServerRemovePlayer(NetworkConnection conn, NetworkIdentity player)
+    {
+        print("************************************OnServerRemovePlayer");
+        base.OnServerRemovePlayer(conn, player);
+    }
+
+    public override void OnServerChangeScene(string newSceneName)
+    {
+        print("************************************OnServerChangeScene");
+        //DontDestroyOnload.disconnected = true;
+        base.OnServerChangeScene(newSceneName);
+    }
+    public override void OnClientChangeScene(string newSceneName)
+    {
+        //DontDestroyOnload.disconnected = true;
+        print("************************************OnClientChangeScene");
+        base.OnClientChangeScene(newSceneName);
+    }
+
+    public override void Awake()
+    {
+        DontDestroyOnload.disconnected = true;
+        print("************************************Awake");
+        base.Awake();
+    }
+
     public override void OnClientConnect(NetworkConnection conn)
     {
         print("CLIENT LOADED");

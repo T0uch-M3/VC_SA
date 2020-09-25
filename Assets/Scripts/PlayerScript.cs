@@ -12,7 +12,7 @@ public class PlayerScript : NetworkBehaviour
     public Rigidbody2D rigidbody2d;
     public NewNetworkManager ntManager;
 
-    public static bool triggered = false;
+    public bool triggered = false;
     public bool triggerStatus = false;
     private RoomChannels chanCol;
     public RoomChannel roomChan;
@@ -102,8 +102,27 @@ public class PlayerScript : NetworkBehaviour
         //InvokeRepeating(nameof(CmdUpdateStatus), 1, 1);
         if (Input.GetKeyDown(KeyCode.X))
         {
+            //ntManager.StopClient();
+            
+            
+
             ntManager.StopHost();
+            //ntManager.OnApplicationQuit();
+
+
+
+            //ntManager.StopServer();
             //print(chanCol.Count);
+            //print("TRIGGERED: " + triggered);
+
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            //print("NBRPALYER  " + ntManager.numPlayers.ToString());
+            //Destroy(GameObject.Find("NetworkManager"));
+
+            //ntManager.StopHost();
+            print(triggered.ToString());
             //print("TRIGGERED: " + triggered);
 
         }
@@ -122,7 +141,7 @@ public class PlayerScript : NetworkBehaviour
         {
             if (isServer)
                 ntManager.StopHost();
-            triggerDisconnect = false;
+            triggerDisconnect = false;//the secret ingredient
         }
         //print("TRIGGER DISCONNECT");
         //if(isServer)
@@ -161,17 +180,23 @@ public class PlayerScript : NetworkBehaviour
     //prevent unwanted access to the object when not "isLocalPl yer"
     public void OpenVoiceComm()
     {
+        print("CLICK "+triggered.ToString());
         if (!triggered)
         {
             if (isServer && BtnScript.text == "stop")
             {
                 //print("NBRPALYER" + ntManager.numPlayers.ToString());
                 ntManager.StopHost();
+                triggered = true;
+                return;
             }
             if (isClient && BtnScript.text == "stop")
             {
-                ntManager.StopClient();
+                ntManager.StopHost();
+                triggered = true;
+                return;
             }
+            //IgnoranceThreaded.activeTransport.Shutdown();
 
             print("clicked");
             if (isLocalPlayer)
