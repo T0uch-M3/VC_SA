@@ -139,7 +139,6 @@ public class PlayerScript : NetworkBehaviour
         }
         if (triggerDisconnect)
         {
-            if (isServer)
                 ntManager.StopHost();
             triggerDisconnect = false;//the secret ingredient
         }

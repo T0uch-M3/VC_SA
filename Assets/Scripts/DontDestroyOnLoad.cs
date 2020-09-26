@@ -85,7 +85,7 @@ public class DontDestroyOnload : MonoBehaviour
         }
         else if (isAndroid)
         {
-            unitText.text = "Client";
+            unitText.text = "Server";
         }
         else
         {
@@ -200,7 +200,7 @@ public class DontDestroyOnload : MonoBehaviour
                 }
             }
 
-
+            advance = false;
         }
 
         if (pointerDown)
@@ -229,11 +229,11 @@ public class DontDestroyOnload : MonoBehaviour
             }
 
         }
-        if (advance)
-        {
-            print("ADVANCE " + unitText.text);
-            advance = false;
-        }
+        //if (advance)
+        //{
+        //    print("ADVANCE " + unitText.text);
+        //    advance = false;
+        //}
     }
 
     public void OnPointerUp()
