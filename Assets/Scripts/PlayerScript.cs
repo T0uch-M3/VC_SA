@@ -1,5 +1,6 @@
 using System;
 using Dissonance;
+using Dissonance.Audio;
 using Mirror;
 using Mirror.Websocket;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class PlayerScript : NetworkBehaviour
     public GameObject activateVoice;
     public Rigidbody2D rigidbody2d;
     public NewNetworkManager ntManager;
+    public Slider volSlider;
 
     public bool triggered = false;
     public bool triggerStatus = false;
@@ -20,6 +22,7 @@ public class PlayerScript : NetworkBehaviour
     public Text statusText;
     public static bool clicked = false;
     public static bool triggerDisconnect = false;
+    public float vol = 0;
 
 
     // Start is called before the first frame update
@@ -27,8 +30,13 @@ public class PlayerScript : NetworkBehaviour
     {
         ntManager = GameObject.Find("NetworkManager").GetComponent<NewNetworkManager>();
         disCom = GameObject.Find("DissonanceSetup").GetComponent<DissonanceComms>();
+        volSlider = GameObject.Find("VolSlider").GetComponent<Slider>();
         //channels collection
         chanCol = disCom.RoomChannels;
+        //vol = disCom.RemoteVoiceVolume;
+        //vol = roomChan.Volume;
+
+        volSlider.onValueChanged.AddListener(SliderValChange);
     }
 
     [SyncVar(hook = nameof(OnStatusChange))]
@@ -103,8 +111,8 @@ public class PlayerScript : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             //ntManager.StopClient();
-            
-            
+
+
 
             ntManager.StopHost();
             //ntManager.OnApplicationQuit();
@@ -139,12 +147,21 @@ public class PlayerScript : NetworkBehaviour
         }
         if (triggerDisconnect)
         {
-                ntManager.StopHost();
+            ntManager.StopHost();
             triggerDisconnect = false;//the secret ingredient
         }
         //print("TRIGGER DISCONNECT");
         //if(isServer)
         //    print("NBRPALYER  " + ntManager.numPlayers.ToString());
+        if (triggered)
+        {
+            roomChan.Volume = vol;
+        }
+    }
+
+    public void SliderValChange(float val)
+    {
+        vol = volSlider.value;
     }
 
     public override void OnStartLocalPlayer()
@@ -179,7 +196,7 @@ public class PlayerScript : NetworkBehaviour
     //prevent unwanted access to the object when not "isLocalPl yer"
     public void OpenVoiceComm()
     {
-        print("CLICK "+triggered.ToString());
+        print("CLICK " + triggered.ToString());
         if (!triggered)
         {
             if (isServer && BtnScript.text == "stop")
@@ -204,6 +221,7 @@ public class PlayerScript : NetworkBehaviour
             triggered = true;
             //triggerStatus = true;
             //clicked = false;
+            vol = roomChan.Volume;
         }
         else
         {
