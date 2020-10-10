@@ -48,7 +48,6 @@ public class BtnScript : MonoBehaviour
     //Since directly triggering OpenVoiceComm from outside trigger an exception
     public void changeClickStatus()
     {
-        //PlayerScript.clicked = PlayerScript.clicked != true;
         PlayerScript.clicked = true;
     }
     public void OnPointerUp()

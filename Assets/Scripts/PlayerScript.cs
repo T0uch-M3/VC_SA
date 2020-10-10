@@ -42,6 +42,9 @@ public class PlayerScript : NetworkBehaviour
     [SyncVar(hook = nameof(OnStatusChange))]
     public string statusData;
 
+    [SyncVar(hook = nameof(OnVolChange))]
+    public float volData;
+
 
 
     void OnStatusChange(string oldStatusData, string newStatusData)
@@ -58,15 +61,25 @@ public class PlayerScript : NetworkBehaviour
         }
     }
 
+    void OnVolChange(float oldVol, float newVol)
+    {
+        print("OnVolChange");
+        volSlider.value = newVol;
+    }
+
 
     [Command]
     void CmdUpdateStatus(string value)
     {
         //print("CmdUpdateStatus");
         statusData = value;
-        //BtnScript.text = triggered ? "Stop" : "Start";
-
         //statusData = Random.Range(100, 999).ToString();
+    }
+
+    [Command]
+    void CmdUpdateVol(float val)
+    {
+        volData = val;
     }
 
     /* This another working method for sending messages from client to server
@@ -105,39 +118,29 @@ public class PlayerScript : NetworkBehaviour
         {
             rigidbody2d.velocity = new Vector2(0, Input.GetAxisRaw("Vertical")) *
                                    (700 * Time.fixedDeltaTime);
-
         }
         //InvokeRepeating(nameof(CmdUpdateStatus), 1, 1);
         if (Input.GetKeyDown(KeyCode.X))
         {
-            //ntManager.StopClient();
-
-
-
             ntManager.StopHost();
-            //ntManager.OnApplicationQuit();
-
-
-
-            //ntManager.StopServer();
-            //print(chanCol.Count);
-            //print("TRIGGERED: " + triggered);
-
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
-            //print("NBRPALYER  " + ntManager.numPlayers.ToString());
-            //Destroy(GameObject.Find("NetworkManager"));
-
-            //ntManager.StopHost();
             print(triggered.ToString());
-            //print("TRIGGERED: " + triggered);
-
         }
 
         if (!isLocalPlayer) return;
         if (NetworkClient.active)
+        {
             CmdUpdateStatus(chanCol.Count > 0 ? "open" : "close");
+            ///the slider only worked on one side, using it on the other side
+            ///only triggered the animation, with no volume change.
+            ///But after bringing CmdUpdateVol to here from under if(triggered)
+            ///it started working on both side.
+            CmdUpdateVol(vol);
+        }
+
+
 
         //clicked change is triggered from inside BtnScript.cs
         if (clicked)
@@ -145,14 +148,13 @@ public class PlayerScript : NetworkBehaviour
             OpenVoiceComm();
             clicked = false;
         }
+
         if (triggerDisconnect)
         {
             ntManager.StopHost();
-            triggerDisconnect = false;//the secret ingredient
+            triggerDisconnect = false;///the secret ingredient
         }
-        //print("TRIGGER DISCONNECT");
-        //if(isServer)
-        //    print("NBRPALYER  " + ntManager.numPlayers.ToString());
+
         if (triggered)
         {
             roomChan.Volume = vol;
@@ -162,6 +164,7 @@ public class PlayerScript : NetworkBehaviour
     public void SliderValChange(float val)
     {
         vol = volSlider.value;
+
     }
 
     public override void OnStartLocalPlayer()
@@ -183,17 +186,8 @@ public class PlayerScript : NetworkBehaviour
 
     }
 
-    //public void stopHost()
-    //{
-    //    if (isServer )
-    //    {
-    //        print("inside stopHost" );
-    //        ntManager.StopHost();
-    //    }
-    //}
-
     //The calling of CmdUpdateStatus below is counting on object authority to 
-    //prevent unwanted access to the object when not "isLocalPl yer"
+    //prevent unwanted access to the object when not "isLocalPlayer"
     public void OpenVoiceComm()
     {
         print("CLICK " + triggered.ToString());
@@ -235,29 +229,5 @@ public class PlayerScript : NetworkBehaviour
             //clicked = false;
         }
     }
-    /// TODO/ Check the number of opened channel before closing from outside
-    /// TODO/ the class, print it the count out and see, so we know whether we   
-    /// TODO/ are checking the right object/script or not
-    //public void CloseOpenedChannels()
-    //{
-    //    //try
-    //    //{
-    //    if (isServer)
-    //    {
-    //        print("CLOSE FROM SERVER");
-    //        //print(chanCol.Count);
-    //        roomChan.Dispose();
-    //    }
-    //    else
-    //    {
-    //        print("CLOSE FROM CLIENT");
-    //        //print(chanCol.Count);
-    //        roomChan.Dispose();
-    //    }
-    //    //}
-    //    //catch (NullReferenceException ex)
-    //    //{
-    //    //    print(ex.Message);
-    //    //}
-    //}
+
 }
