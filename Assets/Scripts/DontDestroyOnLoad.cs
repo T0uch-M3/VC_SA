@@ -45,6 +45,8 @@ public class DontDestroyOnload : MonoBehaviour
     bool clickChanged = false;
     bool advance = false;
     bool secondClick = false;
+
+
     void Awake()
     {
         //if (Instance == null)
@@ -60,6 +62,7 @@ public class DontDestroyOnload : MonoBehaviour
         _manager = GameObject.Find("NetworkManager").GetComponent<NewNetworkManager>();
         networkDiscovery = _manager.GetComponent<NetworkDiscovery>();
 
+        ToolbarHider.getActiveWindow();
     }
 #if UNITY_EDITOR
     void OnValidate()
@@ -95,7 +98,7 @@ public class DontDestroyOnload : MonoBehaviour
 
         networkDiscovery.OnServerFound.AddListener(OnDiscoveredServer);
 
-        //timerIsRunning = true;
+        ToolbarHider.showWindowsBorder();
     }
 
     public void OnDiscoveredServer(ServerResponse info)

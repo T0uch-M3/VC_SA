@@ -157,7 +157,7 @@ public class PlayerScript : NetworkBehaviour
 
         if (triggered)
         {
-            roomChan.Volume = vol;
+            //roomChan.Volume = vol;
         }
     }
 
@@ -229,5 +229,7 @@ public class PlayerScript : NetworkBehaviour
             //clicked = false;
         }
     }
+
+
 
 }
