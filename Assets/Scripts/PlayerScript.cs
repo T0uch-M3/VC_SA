@@ -54,10 +54,12 @@ public class PlayerScript : NetworkBehaviour
         if (newStatusData == "open")
         {
             BtnScript.text = "stop";
+            volSlider.interactable = true;
         }
         else
         {
             BtnScript.text = "start";
+            volSlider.interactable = false;
         }
     }
 
@@ -109,7 +111,6 @@ public class PlayerScript : NetworkBehaviour
     //{
 
     //}
-
 
     // Update is called once per frame
     void Update()

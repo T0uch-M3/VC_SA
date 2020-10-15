@@ -24,6 +24,7 @@ public class DontDestroyOnload : MonoBehaviour
     //And this static instance var of this class will be used for that 
     public static DontDestroyOnload Instance;
     public GameObject uniBtn;
+    
     public GameObject eventSystem;
     readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
     public NetworkDiscovery networkDiscovery;
@@ -32,7 +33,7 @@ public class DontDestroyOnload : MonoBehaviour
     private bool isAndroid = Application.platform == RuntimePlatform.Android;
     private bool isWindows = Application.platform == RuntimePlatform.WindowsPlayer;
 
-    public float timeRemaining = 5;
+    public float timeRemaining = 4;
     public bool timerIsRunning = false;
     public bool foundServer = false;
     private TextMeshProUGUI unitText;
@@ -45,6 +46,7 @@ public class DontDestroyOnload : MonoBehaviour
     bool clickChanged = false;
     bool advance = false;
     bool secondClick = false;
+
 
 
     void Awake()
@@ -62,8 +64,10 @@ public class DontDestroyOnload : MonoBehaviour
         _manager = GameObject.Find("NetworkManager").GetComponent<NewNetworkManager>();
         networkDiscovery = _manager.GetComponent<NetworkDiscovery>();
 
-        ToolbarHider.getActiveWindow();
+        if (isWindows)
+            ToolbarHider.getActiveWindow();
     }
+
 #if UNITY_EDITOR
     void OnValidate()
     {
@@ -97,8 +101,12 @@ public class DontDestroyOnload : MonoBehaviour
 
 
         networkDiscovery.OnServerFound.AddListener(OnDiscoveredServer);
+        if (isWindows || isEditor)
+        {
+            ToolbarHider.showWindowsBorder();
+            gameObject.AddComponent<DragScript>();
+        }
 
-        ToolbarHider.showWindowsBorder();
     }
 
     public void OnDiscoveredServer(ServerResponse info)
@@ -113,7 +121,7 @@ public class DontDestroyOnload : MonoBehaviour
     {
         if (disconnected)
         {
-            print("STooooooooooooooooooooooooooooooooOP DISCOVERY");
+            print("STOP DISCOVERY");
             networkDiscovery.StopDiscovery();
             disconnected = false;
         }
@@ -172,7 +180,7 @@ public class DontDestroyOnload : MonoBehaviour
             //if (/*isEditor || */isWindows)
             if (isServer)
             {
-                print("SERVVVVVVVVVVVVER");
+                print("SERVER");
                 discoveredServers.Clear();
                 _manager.StartHost();
                 networkDiscovery.AdvertiseServer();
@@ -183,18 +191,18 @@ public class DontDestroyOnload : MonoBehaviour
             {
                 if (!foundServer)
                 {
-                    print("CLIIIIIIIIIIIIIIENT");
+                    print("CLIENT");
                     discoveredServers.Clear();
                     networkDiscovery.StartDiscovery();
                     timerIsRunning = true;
-                    timeRemaining = 5;
+                    timeRemaining = 4;
                     unitText.text = "Wait..";
                     uniBtn.GetComponent<Button>().interactable = false;
                     //uniBtn.SetActive(false);}
                 }
                 else
                 {
-                    print("INNNNNNNNNNSIDEEE");
+                    print("INSIDE");
                     _manager.StartClient(discoveredServers.Values.First().uri);
                     //networkDiscovery.StopDiscovery();
                     foundServer = false;
@@ -241,6 +249,8 @@ public class DontDestroyOnload : MonoBehaviour
 
     public void OnPointerUp()
     {
+        if (timerIsRunning)//to avoid changing the button while in "Wait.."
+            return;
         pointerDown = false;
         if (!clickChanged)
         {
@@ -256,6 +266,8 @@ public class DontDestroyOnload : MonoBehaviour
     }
     public void OnPointerDown()
     {
+        if (timerIsRunning)
+            return;
         pointerDown = true;
         if (clickChanged)
             secondClick = true;
