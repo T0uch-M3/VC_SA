@@ -54,12 +54,14 @@ public class PlayerScript : NetworkBehaviour
         if (newStatusData == "open")
         {
             BtnScript.text = "stop";
-            volSlider.interactable = true;
+            if (volSlider != null)
+                volSlider.interactable = true;
         }
         else
         {
             BtnScript.text = "start";
-            volSlider.interactable = false;
+            if (volSlider != null)
+                volSlider.interactable = false;
         }
     }
 
@@ -158,14 +160,13 @@ public class PlayerScript : NetworkBehaviour
 
         if (triggered)
         {
-            //roomChan.Volume = vol;
+            roomChan.Volume = vol;
         }
     }
 
     public void SliderValChange(float val)
     {
         vol = volSlider.value;
-
     }
 
     public override void OnStartLocalPlayer()
@@ -178,13 +179,7 @@ public class PlayerScript : NetworkBehaviour
         //CloseOpenedChannels();
         //print("entered CLIENT START");
         base.OnStartClient();
-
         transform.SetParent(GameObject.Find("ButtonPanel").transform);
-
-
-        //transform.position = new Vector2(400, 500);
-        //transform.position = ntManager.GetStartPosition().position;
-
     }
 
     //The calling of CmdUpdateStatus below is counting on object authority to 

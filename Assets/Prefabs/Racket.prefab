@@ -51,6 +51,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -164,6 +165,15 @@ MonoBehaviour:
   syncInterval: 0.1
   activateVoice: {fileID: 787528987283660625, guid: 7357e574cb1bc3d46aab245fbba7e2e9,
     type: 3}
+  rigidbody2d: {fileID: 0}
+  ntManager: {fileID: 0}
+  volSlider: {fileID: 0}
+  triggered: 0
+  triggerStatus: 0
+  statusText: {fileID: 0}
+  vol: 0
+  statusData: 
+  volData: 0
 --- !u!114 &114398896143473162
 MonoBehaviour:
   m_ObjectHideFlags: 0

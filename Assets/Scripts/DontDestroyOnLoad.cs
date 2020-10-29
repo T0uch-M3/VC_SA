@@ -63,9 +63,15 @@ public class DontDestroyOnload : MonoBehaviour
         //}
         _manager = GameObject.Find("NetworkManager").GetComponent<NewNetworkManager>();
         networkDiscovery = _manager.GetComponent<NetworkDiscovery>();
-
+        ///manually setting the resolution because of a bug in the Toolbarhider class
+        ///which is everytime the program get launched (win) it's resolution get bigger
+        
         if (isWindows)
+        {
+            Screen.SetResolution(250, 300, false);
             ToolbarHider.getActiveWindow();
+        }
+            
     }
 
 #if UNITY_EDITOR
@@ -105,8 +111,8 @@ public class DontDestroyOnload : MonoBehaviour
         {
             ToolbarHider.showWindowsBorder();
             gameObject.AddComponent<DragScript>();
+            gameObject.GetComponent<Outline>().enabled = true;
         }
-
     }
 
     public void OnDiscoveredServer(ServerResponse info)
@@ -240,11 +246,6 @@ public class DontDestroyOnload : MonoBehaviour
             }
 
         }
-        //if (advance)
-        //{
-        //    print("ADVANCE " + unitText.text);
-        //    advance = false;
-        //}
     }
 
     public void OnPointerUp()

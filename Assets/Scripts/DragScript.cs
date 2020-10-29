@@ -32,7 +32,7 @@ public class DragScript : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     [DllImport("User32.dll")]
     static extern IntPtr SetActiveWindow(IntPtr hWnd);
     [DllImport("User32.dll")]
-    static extern bool SendMessageCallback(IntPtr hWnd, int Msg, int wParam, int lParam, 
+    static extern bool SendMessageCallback(IntPtr hWnd, int Msg, int wParam, int lParam,
         SendAsyncProc IpCallback, int dwData);
     [DllImport("User32.dll", EntryPoint = "FindWindow", CharSet = CharSet.Unicode)]
     static extern IntPtr FindWindowNative(String ClassName, string windowName);
@@ -113,4 +113,6 @@ public class DragScript : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     {
         print("UP");
     }
+
+   
 }

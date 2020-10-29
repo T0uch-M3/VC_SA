@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - closeBtn
+  - Headertext
   layers:
   - Default
   - TransparentFX
