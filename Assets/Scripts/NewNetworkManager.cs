@@ -9,7 +9,6 @@ public class NewNetworkManager : NetworkManager
     public PlayerScript playerScript;
     public static bool clientLoaded = false;
 
-    
     //private GameObject player;
 
     // Start is called before the first frame update
@@ -22,13 +21,11 @@ public class NewNetworkManager : NetworkManager
     //// Update is called once per frame
     //void Update()
     //{
-
     //}
 
-    
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
-        //avoiding wrong positioning when the client disconnect and connect again 
+        //avoiding wrong positioning when the client disconnect and connect again
         Transform start = numPlayers == 0 ? leftPosition : rightPosition;
         GameObject player = Instantiate(playerPrefab, start.position, start.rotation);
         NetworkServer.AddPlayerForConnection(conn, player);
@@ -39,9 +36,8 @@ public class NewNetworkManager : NetworkManager
         clientLoaded = false;
         //playerScript.CloseOpenedChannels();
         DontDestroyOnload.disconnected = true;
-        print("***********************************OnClientDisconnect");
+        //print("***********************************OnClientDisconnect");
         base.OnClientDisconnect(conn);
-        
     }
 
     public override void OnServerDisconnect(NetworkConnection conn)
@@ -49,51 +45,52 @@ public class NewNetworkManager : NetworkManager
         //since this get triggered when client leave server
         //we want to opt the server out from the comm interface
         //this way, both client and server will go back to their initial UI
-        //so the roles can be switched if necessary 
+        //so the roles can be switched if necessary
         PlayerScript.triggerDisconnect = true;
 
         //DontDestroyOnload.disconnected = true;
         //DontDestroyOnload.disconnected = true;
         //playerScript.CloseOpenedChannels();
-        print("************************************OnServerDisconnect");
+        //print("************************************OnServerDisconnect");
         //base.OnServerDisconnect(conn);
     }
 
     public override void OnApplicationQuit()
     {
-        print("************************************OnApplicationQuit");
+        //print("************************************OnApplicationQuit");
         base.OnApplicationQuit();
     }
 
     public override void OnServerRemovePlayer(NetworkConnection conn, NetworkIdentity player)
     {
-        print("************************************OnServerRemovePlayer");
+        //print("************************************OnServerRemovePlayer");
         base.OnServerRemovePlayer(conn, player);
     }
 
     public override void OnServerChangeScene(string newSceneName)
     {
-        print("************************************OnServerChangeScene");
+        //print("************************************OnServerChangeScene");
         //DontDestroyOnload.disconnected = true;
         base.OnServerChangeScene(newSceneName);
     }
+
     public override void OnClientChangeScene(string newSceneName)
     {
         //DontDestroyOnload.disconnected = true;
-        print("************************************OnClientChangeScene");
+        //print("************************************OnClientChangeScene");
         base.OnClientChangeScene(newSceneName);
     }
 
     public override void Awake()
     {
         DontDestroyOnload.disconnected = true;
-        print("************************************Awake");
+        //print("************************************Awake");
         base.Awake();
     }
 
     public override void OnClientConnect(NetworkConnection conn)
     {
-        print("CLIENT LOADED");
+        //print("CLIENT LOADED");
         clientLoaded = true;
         base.OnClientConnect(conn);
     }

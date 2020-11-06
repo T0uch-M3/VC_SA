@@ -421,3 +421,15 @@ MigrationBackup/
 
 # End of https://www.gitignore.io/api/visualstudio
 
+
+ProjectSettings/BurstAotSettings_StandaloneWindows.json
+
+ProjectSettings/DeviceSimulatorSettings.asset
+
+ProjectSettings/TimelineSettings.asset
+
+ProjectSettings/ProjectSettings.asset
+
+ProjectSettings/EditorSettings.asset
+
+ProjectSettings/BurstAotSettings_Android.json

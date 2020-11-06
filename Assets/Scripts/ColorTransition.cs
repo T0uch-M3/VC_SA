@@ -9,17 +9,16 @@ public class ColorTransition : MonoBehaviour
 {
     public float timeLeft = 5f;
     public float every = 0;
-    bool toZero = false;
-    bool toOne = true;
+    private bool toZero = false;
+    private bool toOne = true;
     public bool interpolating = false;
-    Color targetColor = Color.grey;
-    TextMeshProUGUI topText;
-    Color green = new Color(0f, 1f, 0);
-    Color red = new Color(1f, 0, 0);
-
+    private Color targetColor = Color.grey;
+    private TextMeshProUGUI topText;
+    private Color green = new Color(0f, 1f, 0);
+    private Color red = new Color(1f, 0, 0);
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         //print("shader name "+gameObject.GetComponent<TextMeshPro>().color);
         //Debug.Log("shader");
@@ -30,13 +29,9 @@ public class ColorTransition : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         //print("shader name " + gameObject.GetComponent<Material>());
-
-
-
-
 
         //topText.faceColor = Color.Lerp(green, SecGreen, every);
 
@@ -60,13 +55,6 @@ public class ColorTransition : MonoBehaviour
         //    }
         //}
 
-
-
-
-
-
-
-
         //if (timeLeft <= Time.deltaTime)
         //{
         //    topText.faceColor = targetColor;
@@ -82,13 +70,8 @@ public class ColorTransition : MonoBehaviour
         //    timeLeft -= Time.deltaTime;
         //}
 
-
-
-
         //topText.faceColor = Color.Lerp(green, red, every);
         //topText.faceColor = Color.Lerp(green, SecGreen, every);
-
-
 
         topText.faceColor = Color.Lerp(topText.faceColor, targetColor, every);
         ///start "every" from 1
@@ -100,7 +83,6 @@ public class ColorTransition : MonoBehaviour
                 toOne = false;
                 toZero = true;
                 //topText.faceColor = targetColor;
-                
             }
         }
         if (toZero)
@@ -119,8 +101,5 @@ public class ColorTransition : MonoBehaviour
             targetColor = new Color(Random.value, Random.value, Random.value);
             interpolating = false;
         }
-
-
-
     }
 }

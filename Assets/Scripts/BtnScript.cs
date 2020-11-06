@@ -9,13 +9,17 @@ using UnityEngine.UI;
 public class BtnScript : MonoBehaviour
 {
     public TextMeshProUGUI uniText2;
+    public GameObject uniBtn2;
+
     public bool pointerDown = false;
+    bool pointerUp = false;
     float clickTimer = 0.7f;
     public bool endTimer = false;
 
-    public GameObject uniBtn2;
+    
     //[SyncVar]
     public static string text = "Start";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +38,7 @@ public class BtnScript : MonoBehaviour
         if (pointerDown)
         {
             clickTimer -= Time.deltaTime;
+            uniBtn2.GetComponent<Image>().fillAmount -= Time.deltaTime / clickTimer;
             if (clickTimer < 0)
             {
                 pointerDown = false;
@@ -42,6 +47,19 @@ public class BtnScript : MonoBehaviour
                 PlayerScript.triggerDisconnect = true;
             }
 
+        }
+        if (pointerUp)
+        {
+            clickTimer += Time.deltaTime;
+            while (uniBtn2.GetComponent<Image>().fillAmount < 1)
+            {
+                uniBtn2.GetComponent<Image>().fillAmount += clickTimer;
+            }
+            
+            if (clickTimer > 0.7)
+            {
+                pointerUp = false;
+            }
         }
     }
     //This to change a player status from outside
@@ -52,6 +70,7 @@ public class BtnScript : MonoBehaviour
     }
     public void OnPointerUp()
     {
+        pointerUp = true;
         pointerDown = false;
         if (!endTimer)
         {

@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
-
 
 public class DragScript : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 //public class DragScript : MonoBehaviour, IBeginDragHandler
@@ -19,28 +14,35 @@ public class DragScript : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     private const int MOUSE_MOVE = 0xF012;
     public const int LeftDown = 0x00000002;
 
-
     private delegate void SendAsyncProc(IntPtr hWnd, int uMsg, IntPtr dwData, IntPtr IResult);
+
     [DllImport("User32.dll")]
-    static extern bool ReleaseCapture();
+    private static extern bool ReleaseCapture();
+
     [DllImport("User32.dll")]
-    static extern IntPtr SetCapture(IntPtr hWnd);
+    private static extern IntPtr SetCapture(IntPtr hWnd);
+
     [DllImport("User32.dll")]
-    static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+    private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
     [DllImport("User32.dll")]
-    static extern System.IntPtr GetActiveWindow();
+    private static extern System.IntPtr GetActiveWindow();
+
     [DllImport("User32.dll")]
-    static extern IntPtr SetActiveWindow(IntPtr hWnd);
+    private static extern IntPtr SetActiveWindow(IntPtr hWnd);
+
     [DllImport("User32.dll")]
-    static extern bool SendMessageCallback(IntPtr hWnd, int Msg, int wParam, int lParam,
+    private static extern bool SendMessageCallback(IntPtr hWnd, int Msg, int wParam, int lParam,
         SendAsyncProc IpCallback, int dwData);
+
     [DllImport("User32.dll", EntryPoint = "FindWindow", CharSet = CharSet.Unicode)]
-    static extern IntPtr FindWindowNative(String ClassName, string windowName);
+    private static extern IntPtr FindWindowNative(String ClassName, string windowName);
+
     [DllImport("User32.dll", EntryPoint = "SetForegroundWindow", CharSet = CharSet.Unicode)]
-    static extern IntPtr SetForegroundWindowNative(IntPtr hWnd);
+    private static extern IntPtr SetForegroundWindowNative(IntPtr hWnd);
+
     [DllImport("User32.dll")]
     private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
-
 
     public IntPtr FindWindow(string className, string windowName)
     {
@@ -52,8 +54,7 @@ public class DragScript : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         return SetForegroundWindowNative(hWnd);
     }
 
-
-    static System.IntPtr activeWin = GetActiveWindow();
+    private static System.IntPtr activeWin = GetActiveWindow();
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -61,8 +62,6 @@ public class DragScript : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         SendAsyncProc WindowDropCallback = new SendAsyncProc(SendMessage_Callback);
         //SendMessageCall instead of SendMessage cuz of the instant callback that we get after triggering the drag
         SendMessageCallback(GetActiveWindow(), WM_SYSCOMMAND, MOUSE_MOVE, 0, WindowDropCallback, 0);
-
-
 
         //SendMessage(GetActiveWindow(), WM_NCLBUTTONDOWN, HT_CAPTION, 0);
         //SendMessage(activeWin, 0x112, 0xF012, 0);
@@ -113,6 +112,4 @@ public class DragScript : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     {
         print("UP");
     }
-
-   
 }
