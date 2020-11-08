@@ -1,0 +1,40 @@
+So this will be a clarification for what most of the classes do and stuff
+
+DontDestroyOnload::This still get destroyed on load, it meant for higher purposes when it got created
+but then dues didn't vult it, contains the code for dealing with the first button, from start server, 
+connecting as a client and color transition for 1st button.
+
+
+NetNetworkManger::Replacing mirror default networkmanager whie overriding it methods for debugging, 
+and triggering certain events, since this class is attached to the network manager, it won't get
+destroyed, so I recently added some code that I wanted to keep between scene changes.
+
+
+BtnScript::This class is acting as intermediary between 2 buttons and their main functionality in 
+PlayerScript, also handling color transitioning for 2nd button.
+To explain, at early development, there was 2 buttons which were responsible of opening and closing the 
+mic, those 2 buttons were acting as players, 2 players communicating, 1 server side, and other client side,
+and later the button that this code attached to, came and took their place.
+
+
+PlayerScript::Contains dissonance's channel control for voice communication, mirror variables synchronizing,
+and slider control.
+
+CommControl::Old class, part of the first version, that I got lazy to bother deleting it, don't think
+it's doing anything now.
+
+
+CloseScript::Dealing with the close button (win)
+
+
+ColorTransition::The result of boredom, this do random color transition on the app logo (not perfect).
+
+
+TitlebarHider::This's one of 2 classes that deal with window properties, hence the dll imports,
+this one deal with hiding the title bar for more clean look.
+
+
+DragScript::Same as above, but make the dragging zone anything in the screen as long the space is empty.
+
+
+TipHandling::Just an easter egg (for fun).

@@ -860,7 +860,7 @@ GameObject:
   - component: {fileID: 542471531}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Canvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1012,6 +1012,7 @@ MonoBehaviour:
   pointerDown: 0
   pointerUp: 0
   clickTimer: 0.6
+  secondClick: 0
 --- !u!114 &542471531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1042,7 +1043,7 @@ GameObject:
   - component: {fileID: 1023388139}
   m_Layer: 5
   m_Name: Tips
-  m_TagString: Untagged
+  m_TagString: Tips
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1679,6 +1680,7 @@ MonoBehaviour:
     type: 3}
   playerScript: {fileID: 6039907069810034158, guid: 7357e574cb1bc3d46aab245fbba7e2e9,
     type: 3}
+  tip: {fileID: 1023388137}
 --- !u!114 &1473573895
 MonoBehaviour:
   m_ObjectHideFlags: 0

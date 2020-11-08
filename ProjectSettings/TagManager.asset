@@ -6,6 +6,8 @@ TagManager:
   tags:
   - closeBtn
   - Headertext
+  - Canvas
+  - Tips
   layers:
   - Default
   - TransparentFX

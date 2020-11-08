@@ -14,8 +14,12 @@
 !Assets/Scenes/
 !Assets/Scripts/
 !Assets/Prefabs/
+/UIElementsSchema/
+
 *.meta
 *.config
+*.vsconfig
+
 
 
 
@@ -66,6 +70,8 @@ sysinfo.txt
 *.aab
 *.unitypackage
 *.zip
+URPProjectSettings.asset
+logo2
 
 # Crashlytics generated file
 crashlytics-build.properties
